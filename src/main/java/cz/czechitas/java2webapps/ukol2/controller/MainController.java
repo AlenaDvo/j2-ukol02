@@ -1,8 +1,5 @@
 package cz.czechitas.java2webapps.ukol2.controller;
 
-import cz.czechitas.java2webapps.ukol2.Application;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +22,7 @@ public class MainController {
         //Soubory z resources se získávají pomocí classloaderu. Nejprve musíme získat aktuální classloader.
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        //Pomocí metody getResourceAsStream() získáme z classloaderu InpuStream, který čte z příslušného souboru.
+        //Pomocí metody getResourceAsStream() získáme z classloaderu InputStream, který čte z příslušného souboru.
         //Následně InputStream převedeme na BufferedRead, který čte text v kódování UTF-8
         try (InputStream inputStream = classLoader.getResourceAsStream(resource);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
@@ -38,20 +35,27 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public ModelAndView novyCitat() {
+    public ModelAndView novyCitatsObrazkem() {
         try {
+//            vybira se nahodny citat
             List<String> citaty = readAllLines("citaty.txt");
             String vybranyCitat = citaty.get(random.nextInt(citaty.size()));
-            System.out.println(vybranyCitat);
+
+//            vybira se nahodny obrazek
+            List<String> obrazky = readAllLines("obrazky.txt");
+            String vybranyObrazek = obrazky.get(random.nextInt(obrazky.size()));
+
+//            vytvari se ModelAndView
             ModelAndView result = new ModelAndView("citat");
-            result.addObject("vybranyCitat", vybranyCitat);
+            result.addObject("vybranyCitat", vybranyCitat)
+                    .addObject("vybranyObrazek", vybranyObrazek);
             return result;
         } catch (IOException e) {
             System.out.println("IOException");
         }
         ModelAndView result = new ModelAndView("citat");
         result.addObject("vybranyCitat", "Toto je nahradni citat.");
+        result.addObject("vybranyObrazek", "nXZRtYllX38");
         return result;
     }
 }
-
