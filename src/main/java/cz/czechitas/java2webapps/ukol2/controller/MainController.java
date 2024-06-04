@@ -35,14 +35,13 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public ModelAndView novyCitatsObrazkem() {
+    public ModelAndView novyCitatsObrazkem(){
         try {
 //            vybira se nahodny citat
             List<String> citaty = readAllLines("citaty.txt");
             String vybranyCitat = citaty.get(random.nextInt(citaty.size()));
-
 //            vybira se nahodny obrazek
-            List<String> obrazky = readAllLines("obrazky.txt");
+                    List < String > obrazky = readAllLines("obrazky.txt");
             String vybranyObrazek = obrazky.get(random.nextInt(obrazky.size()));
 
 //            vytvari se ModelAndView
@@ -50,11 +49,12 @@ public class MainController {
             result.addObject("vybranyCitat", vybranyCitat)
                     .addObject("vybranyObrazek", vybranyObrazek);
             return result;
-        } catch (IOException e) {
-            System.out.println("IOException");
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
         }
+
         ModelAndView result = new ModelAndView("citat");
-        result.addObject("vybranyCitat", "Toto je nahradni citat.");
+        result.addObject("vybranyCitat", "Toto je nahradní citát.");
         result.addObject("vybranyObrazek", "nXZRtYllX38");
         return result;
     }
